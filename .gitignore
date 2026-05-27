@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Claude Code local settings (not for sharing)
+.claude/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Node (for when the actual project repo is created here)
+node_modules/
+.next/
+out/
+dist/
+.env
+.env.local
+.env.*.local
+
+# Python (for ingest pipeline)
+__pycache__/
+*.pyc
+.venv/
+venv/
+.python-version
