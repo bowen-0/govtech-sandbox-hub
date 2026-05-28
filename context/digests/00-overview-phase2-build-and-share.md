@@ -3,8 +3,8 @@
 **Phase**: II (2024–2026) — Phase II overview
 **Topic**: Strategic framing of Phase II — ecosystem enablement, regulatory learning, real-world testing
 **Published**: 2026 (final phase report)
-**Source**: reports/de/00-overview-phase2-build-and-share.pdf — **GERMAN-ONLY** (English version not yet published by Canton Zürich)
-**Length**: ~28 pages
+**Source**: reports/de/00-overview-phase2-build-and-share.pdf (German) + reports/en/00-overview-phase2-build-and-share.pdf (English, *Build & Share — A Sandbox for Enabling the AI Ecosystem*, the official 28-page booklet shared by the challenge owner on 2026-05-28)
+**Length**: 28 pages (both languages)
 
 ## Problem & context
 After Phase I ("Play & Learn", 2022–2024) proved the sandbox model worked, Canton Zürich's *Standortförderung* (location promotion office, in the *Amt für Wirtschaft* / Office of Economic Affairs) needed to evolve it from a pilot instrument into a structural component of the Swiss AI ecosystem. Phase II's brief: deepen regulatory clarity, broaden into new sectors (notably healthcare), and engage with the now-actionable EU AI Act. Where Phase I focused on *computer vision*, Phase II deliberately shifted toward *generative AI* — timed after the first wave of chatbot hype had passed, so applications could be reflective rather than reactive.
@@ -57,6 +57,29 @@ This is the single most strategic document in the corpus — it explains what th
 ## Notable quotes
 - "Our sandbox approach deliberately uses the strengths of the Swiss AI ecosystem: collaboration, openness and a clear practical focus." (*«Unser Sandbox-Ansatz nutzt gezielt die Stärken des Schweizer KI-Ökosystems: Kollaboration, Offenheit und klarer Praxisfokus.»*) — Raphael von Thiessen, p. 4.
 - "Precisely in healthcare, you need protected test spaces to effectively bring regulatory requirements and progress together." (*«Gerade im Gesundheitswesen braucht es geschützte Testräume, um regulatorische Anforderungen und Fortschritt effektiv zusammenzubringen.»*) — Stefan Lienhard, CEO digital health center Bülach, p. 7.
+
+## Taxonomies the booklet hands us (load-bearing for the wiki schema)
+
+The English booklet makes three categorisations explicit that are not derivable from the project reports alone. Treat as authoritative seed enums for the wiki.
+
+**7-sector submission taxonomy** (figure 1, p. 6 — the buckets the steering committee used to classify the 24 submissions):
+1. Mobility (traffic data, visitor tracking, sensor-based bridge monitoring)
+2. Autonomous Systems (inspection robots)
+3. Public Administration (semantic search, document understanding, chatbots for enquiries, AI-supported appeal decisions, chatbot for environment + social affairs)
+4. Education & Work (vocational training environments, AI-based skills assessment, AI assistant for upper secondary school entrance exams)
+5. Healthcare (medical documentation, AI health assistant, GenAI for symptom diagnosis, Digital Eye Clinic)
+6. Construction Sector (AI assistant for construction projects, AI in building permit procedures)
+7. Other (deepfake detection, humanitarian demining, raw material procurement, anti-littering tool)
+
+**5 partner-role types around a sandbox project** (p. 8 diagram):
+1. **Test partners** — provide real-world application context, data, operational environment.
+2. **Technical implementation partners** — build prototypes/models/infrastructure; work closely with test partners.
+3. **Mandated experts** — contribute regulatory or domain expertise within a formal mandate; deliver robust analyses.
+4. **Domain sparring partners** — informal expert exchange, validation of assumptions, quality assurance without formal mandate.
+5. **Supervisory authorities** — feedback from oversight perspective, early clarification of regulatory issues.
+
+**11-term canonical glossary** (p. 26 — these are the sandbox's official term-of-art definitions; use as concept-page seeds):
+Computer Vision · Deepfakes · EU AI Act · Frontier Models · Generative AI · Intrapreneurship · ISO/IEC 42001 · Large Language Models (LLMs) · LLM Benchmarks · Machinery Regulation (EU Machinery Regulation) · Real-World Testing.
 
 ## Three biggest deltas vs. Phase I (Play & Learn)
 1. **Generative AI replaced computer vision as the technological centre of gravity**, but only after the team deliberately waited out the initial chatbot wave so they could test it reflectively.

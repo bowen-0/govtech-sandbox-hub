@@ -57,7 +57,7 @@ The downloaded organiser repo.
 | # | Topic | Phase | EN file | DE file | Report focus |
 |---|---|---|---|---|---|
 | **0a** | **Play & Learn** (sandbox overview) | I | `en/00-overview-phase1-play-and-learn.pdf` | `de/00-overview-phase1-play-and-learn.pdf` | Why the sandbox exists, its goals (regulatory learning, innovation, knowledge transfer, regulatory input), the 2-axis sandbox typology (*regulatory advice* × *data provision*), application/selection process, governance. **Best single entry point.** |
-| **0b** | **Build & Share** (Phase II overview) | II | *(not yet published in EN — zh.ch says "in the coming months")* | `de/00-overview-phase2-build-and-share.pdf` | Phase II strategic framing — ecosystem-enablement, revised methodology. **Skip on first pass** — Phase II project reports cover the substance. |
+| **0b** | **Build & Share** (Phase II overview) | II | `en/00-overview-phase2-build-and-share.pdf` | `de/00-overview-phase2-build-and-share.pdf` | Phase II strategic framing — ecosystem-enablement, four-pillar 2026–2029 ZH ecosystem strategy, 7-sector submission taxonomy, 5 partner-role types, 11-term glossary, hyperlink graph into other Phase II reports. **The authoritative current snapshot of where the sandbox is now**; pair with Play & Learn for the full arc. |
 | 1 | Smart Parking | I | `en/p1-smart-parking.pdf` | `de/p1-smart-parking.pdf` | Best practices for image recognition — operational/technical playbook for camera-based free-parking detection. |
 | 2 | Autonomous Systems | I | `en/p1-autonomous-systems.pdf` | `de/p1-autonomous-systems.pdf` | **Regulatory guide** for autonomous machinery (drones, agricultural systems). |
 | 3 | Automated Infrastructure Maintenance | I | `en/p1-infrastructure-maintenance.pdf` | *(not in the bundle the challenge owner shipped; EN-only)* | Drone inspections with computer vision. **Important context** — this was the "missing" Phase I project. |
@@ -142,6 +142,7 @@ All under base `https://www.zh.ch/content/dam/zhweb/bilder-dokumente/themen/wirt
 | `reports/en/p1-infrastructure-maintenance.pdf` | `sandbox_ibm_research_infrastructure_maintenance_en.pdf` | Nov 2023 |
 | `reports/en/p1-machine-translation.pdf` | `maschine_translation_kzh_sandbox_report.pdf` | Feb 2024 |
 | `reports/en/p1-ai-in-education.pdf` | `best_practices_ki_bildung_EN.pdf` | Oct 2023 |
+| `reports/en/00-overview-phase2-build-and-share.pdf` | `052026-1-Innovation-Sandbox-Booklet-A4-EN.pdf` | May 2026 |
 | `reports/en/p2-bridge-monitoring.pdf` | `sensorbasierte_brueckenueberwachung_en.pdf` | Feb 2026 |
 | `reports/en/p2-digital-eye-clinic.pdf` | `digital_eye_clinic_en.pdf` | Dec 2025 |
 | `reports/en/p2-inspection-robots.pdf` | `autonome_inspektionsroboter_en.pdf` | Nov 2025 |
@@ -168,8 +169,8 @@ Originals available via the S3 URLs in `challenge/brief.md`.
 | `challenge/slides.pdf` | `challenge-context-pdf.pdf` |
 
 ### Asymmetries
-- **No EN** for `00-overview-phase2-build-and-share.pdf` — zh.ch states a Phase II final report will publish "in the coming months."
 - **No DE** for `p1-infrastructure-maintenance.pdf` — wasn't in the challenge-platform bundle; only the EN version was fetchable. (A German version likely exists on the zh.ch German page; fetch on demand if needed for prototype citations.)
+- ~~**No EN** for `00-overview-phase2-build-and-share.pdf`~~ — **resolved 2026-05-28**: the EN booklet was shared by the challenge owner and now lives at `reports/en/00-overview-phase2-build-and-share.pdf`. Corpus is now symmetrically bilingual for both phase overviews.
 
 ## 8. Pre-event checklist
 
