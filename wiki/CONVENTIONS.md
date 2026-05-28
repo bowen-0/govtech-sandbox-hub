@@ -100,6 +100,12 @@ sources:
 confidence: high | medium | low                                       # how transferable is this lesson?
 freshness: 2026-04                                                    # source publication month; drives stale-warning UI
 applies_to_lifecycle_stage: [scoping, procurement, deployment]        # optional, helps the generator filter
+cross_cutting: true | false                                           # optional. Set true when the lesson is a general
+                                                                      # principle the booklet states across multiple
+                                                                      # pilots (e.g. anything in [[00-overview-phase2-build-and-share]]
+                                                                      # §04 Technology/Legal/Organisation). The future
+                                                                      # generator should weight these higher for
+                                                                      # general queries vs. case-study-specific ones.
 ```
 
 #### `sources/` — citation backbone
@@ -247,3 +253,4 @@ Until the lint pass exists, these are conventions, not enforcement. Reviewers sh
 | Date | Change |
 |---|---|
 | 2026-05-28 | Initial conventions file. Soft schema based on the wiki vs KG decision in [`../context/architecture-route.md`](../context/architecture-route.md) and the data substrate sketch in [`../context/data-architecture-walkthrough.md`](../context/data-architecture-walkthrough.md). Sector taxonomy (§4) and partner-role taxonomy (§4) seeded from the Build & Share booklet (figure 1 p.6, role diagram p.8). |
+| 2026-05-28 | Added `cross_cutting: true \| false` to the lesson schema. Used on lessons that are *general principles* drawn from [[00-overview-phase2-build-and-share]] §04 — these should retrieve before case-study-specific lessons for general queries. Codified after applying to 14 lessons in the same commit (well past the 3+ rule). Source: cross-cutting principles synthesis page `wiki/synthesis/phase-2-cross-cutting-principles.md`. |

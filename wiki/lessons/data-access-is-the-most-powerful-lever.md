@@ -12,6 +12,7 @@ sources:
 confidence: high
 freshness: 2026-05
 applies_to_lifecycle_stage: [scoping, procurement]
+cross_cutting: true
 created: 2026-05-28
 updated: 2026-05-28
 ---

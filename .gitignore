@@ -8,6 +8,7 @@
 .vscode/
 .idea/
 *.swp
+.obsidian/
 
 # Node (for when the actual project repo is created here)
 node_modules/
