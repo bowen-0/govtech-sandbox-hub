@@ -3,6 +3,10 @@
 
 # Claude Code local settings (not for sharing)
 .claude/
+# …except the wiki's portable skills, which ship with the corpus so any
+# Claude Code / Agent SDK consumer of the wiki inherits the query procedure.
+!wiki/.claude/
+!wiki/.claude/**
 
 # Editor
 .vscode/
