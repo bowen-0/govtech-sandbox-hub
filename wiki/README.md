@@ -27,8 +27,9 @@ The corpus is bounded but **the wiki is not**. New sources — papers, web pages
 | [`lessons/`](lessons/)           | Atomic, transferable lessons. **The unit the future generator surfaces.**                      | `type: lesson`, `project[]`, `concept[]`, `sources[]`, `confidence`, `freshness` |
 | [`sources/`](sources/)           | One page per source artefact (PDF, URL, paper, video, transcript…). The citation backbone.     | `type: source`, `source_type`, `path` *or* `url`, `language`, `year`             |
 | [`synthesis/`](synthesis/)       | Cross-cutting patterns. Pages that weave multiple primary entries together.                    | `type: synthesis`, `connects[]`                                                  |
+| [`pdfs/`](pdfs/)                 | The original source PDFs themselves, organised by language (`pdfs/de/`, `pdfs/en/`). Static assets, not pages — linked from each `sources/<slug>.md` via `path:` / `en_path:` and an inline **Read the report** link. | (binary assets — no frontmatter)                                                 |
 
-> The seven types are a **starting set** chosen because they map cleanly onto what the source corpus actually contains. They are *conventions*, not enforcement. If a new pattern keeps appearing in 3+ pages, propose a new folder (see `CONVENTIONS.md` → "How to evolve the schema").
+> The seven page types above are a **starting set** chosen because they map cleanly onto what the source corpus actually contains. They are *conventions*, not enforcement. If a new pattern keeps appearing in 3+ pages, propose a new folder (see `CONVENTIONS.md` → "How to evolve the schema"). `pdfs/` is the only folder without page-type semantics — it's the static-asset companion to `sources/` and ships with the wiki when hosted as HTML.
 
 ---
 
@@ -40,17 +41,21 @@ Three ways, depending on who you are:
 
 **As an LLM / retrieval system answering a query** — start with [`QUERY.md`](QUERY.md). It contains the canonical answering procedure: read order, citation style, voice rules, gap-honesty. It auto-loads as a skill from [`.claude/skills/query/SKILL.md`](.claude/skills/query/SKILL.md) when this folder is the working directory for Claude Code or the Claude Agent SDK. Then read [`index.md`](index.md) for the navigable inventory. Frontmatter (`type:`, `audience:`, `priority:`, `sector:`, `connects:`, `cross_cutting:`) is structured for filtering and retrieval reranking — use it.
 
-**As an agent / RAG / knowledge-base operator plugging this wiki into your own stack** — this wiki is designed to be **substrate-portable**. Clone the folder; point your consumer at it. The query procedure (`QUERY.md` / `.claude/skills/query/SKILL.md`) ships with the corpus, so any downstream LLM consumer inherits the same answer-quality discipline without bespoke prompt engineering on your side. For runtimes that can't walk folders dynamically (custom GPTs, Claude.ai Projects, raw single-shot API calls), paste `QUERY.md` as the system prompt and the relevant pages (or the generated bundle, when it exists) as context. The procedure is identical across runtimes; only the page-loading mechanism differs.
+**As an LLM / contributor adding a new source** — start with [`INGEST.md`](INGEST.md). It contains the canonical four-phase ingest procedure (READ → PLAN → EXECUTE → BOOKKEEP), the paragraph-anchored citation rules, and the page-template shape for each of the seven types. It auto-loads as a skill from [`.claude/skills/ingest/SKILL.md`](.claude/skills/ingest/SKILL.md). **Recommended runtime: Cowork or local Claude Code** — the paragraph-anchoring step needs a real execution environment for the Docling pipeline. Claude.ai with the GitHub connector works for *editorial* operations on already-ingested sources (drafting a lesson from existing material, cross-references, prose tightening), but not for new PDF ingest.
+
+**As a human SME or challenge owner who wants to contribute** — read [`CONTRIBUTING.md`](CONTRIBUTING.md). It's the step-by-step handover doc: which runtime to pick (Cowork / Claude.ai Projects / ChatGPT), how to set it up from scratch, and what "correct ingest" looks like regardless of which runtime you used. INGEST is the contract; CONTRIBUTING is the operator's manual.
+
+**As an agent / RAG / knowledge-base operator plugging this wiki into your own stack** — this wiki is designed to be **substrate-portable**. Clone the folder; point your consumer at it. Both procedures (`QUERY.md` / `.claude/skills/query/SKILL.md` for read-side, `INGEST.md` / `.claude/skills/ingest/SKILL.md` for write-side) ship with the corpus, so any downstream LLM consumer inherits the same discipline without bespoke prompt engineering on your side. For runtimes that can't walk folders dynamically (custom GPTs, Claude.ai Projects, raw single-shot API calls), paste the relevant procedure file as the system prompt and the relevant pages (or the generated bundle, when it exists) as context. The procedures are identical across runtimes; only the page-loading and tooling mechanism differs.
 
 ---
 
 ## How to add to this wiki
 
-Three common cases (full detail in [`CONVENTIONS.md`](CONVENTIONS.md)):
+The canonical procedure lives in [`INGEST.md`](INGEST.md) — the four-phase READ → PLAN → EXECUTE → BOOKKEEP arc, with file-level templates and the citation-backbone rules. Read it (or invoke the `ingest` skill) before adding any source. The three common cases below are quick orientation; INGEST is the contract and [`CONVENTIONS.md`](CONVENTIONS.md) is the schema spec.
 
 ### Add a new source (PDF, paper, web page, video, transcript)
-1. If it's a file, drop it into `../context/reports/` (or another sensible folder).
-2. Create `sources/<slug>.md` with `type: source`, `source_type:` set to one of `pdf | url | paper | video | transcript | note`, plus `path` (for files) or `url` (for the web).
+1. If it's a PDF, drop it into `pdfs/de/` or `pdfs/en/` (or `pdfs/<lang>/` for other languages). Other file types live in a sensible sibling folder under `pdfs/` (e.g. `pdfs/transcripts/`).
+2. Create `sources/<slug>.md` with `type: source`, `source_type:` set to one of `pdf | url | paper | video | transcript | note`, plus `path` (for files, relative to the wiki root — e.g. `../pdfs/de/<slug>.pdf`) or `url` (for the web). Add a `**Read the report:**` link line under the H1 so HTML readers have a one-click way into the source.
 3. Optionally write the paragraph-anchor index in the same file (only needed for PDFs you intend to cite paragraph-level).
 
 ### Add a lesson
