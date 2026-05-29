@@ -201,9 +201,13 @@ _MITIGATIONS: dict[str, RiskMitigation] = {
 
 def get_all_risks() -> list[Risk]:
     """Return all risks from the internal database."""
-    return _RISKS.copy()
+    from .mit_risk_repository import MIT_RISKS
+
+    return [*_RISKS, *MIT_RISKS]
 
 
 def get_risk_mitigation(risk_id: str) -> RiskMitigation | None:
     """Return mitigation guidance and regulatory references for a risk ID."""
-    return _MITIGATIONS.get(risk_id)
+    from .mit_risk_repository import MIT_MITIGATIONS
+
+    return _MITIGATIONS.get(risk_id) or MIT_MITIGATIONS.get(risk_id)

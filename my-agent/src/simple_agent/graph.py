@@ -22,6 +22,7 @@ from typing_extensions import TypedDict
 
 from .risks_db import RiskMitigation, get_all_risks, get_risk_mitigation
 from .risks_db import Risk as RiskData
+from .wiki_search import WikiHit, search_wiki_documents
 
 # ── Models ────────────────────────────────────────────────────────────────────
 
@@ -41,6 +42,7 @@ class RiskAssessment(TypedDict):
     relevance_reason: str
     mitigation: str
     regulatory_refs: list[str]
+    wiki_refs: list[str]
 
 
 class State(TypedDict):
@@ -49,10 +51,27 @@ class State(TypedDict):
     project_input: Annotated[dict, _merge_project_input]
     all_risks: list[RiskData]
     relevant_risks: list[RiskData]
+    wiki_context: list[WikiHit]
     risk_assessments: list[RiskAssessment]
 
 
 # ── Tools ─────────────────────────────────────────────────────────────────────
+
+
+class _AccordionRiskInput(BaseModel):
+    id: str
+    title: str
+    category: str
+    description: str
+    severity: Literal["low", "medium", "high", "critical"]
+
+
+class _AccordionAssessmentInput(BaseModel):
+    risk: _AccordionRiskInput
+    relevance_reason: str
+    mitigation: str
+    regulatory_refs: list[str] = []
+    wiki_refs: list[str] = []
 
 
 @tool
@@ -87,8 +106,10 @@ def start_risk_analysis(
 ) -> Command:
     """Trigger the automated risk analysis pipeline.
 
-    Only call after confirming with the user. Requires at minimum:
-    name, description, sector, and at least one of (data_types, deployment, size).
+    Call when the user explicitly asks for a risk assessment, risk analysis,
+    regulatory risk list, or "what risks could exist". You may infer obvious
+    fields from the conversation, such as healthcare sector from "healthcare",
+    "dental", "doctor", "clinic", or "patient".
     """
     return Command(
         update={
@@ -98,26 +119,127 @@ def start_risk_analysis(
     )
 
 
-_TOOLS = [update_project_field, start_risk_analysis]
+@tool
+def show_risk_accordion(
+    project: dict[str, str],
+    assessments: list[_AccordionAssessmentInput],
+    tool_call_id: Annotated[str, InjectedToolCallId],
+) -> Command:
+    """Render the risk accordion UI with completed risk assessment data.
+
+    Use this only when you already have concrete assessment rows to show.
+    Each assessment must include:
+      risk.id, risk.title, risk.category, risk.description, risk.severity
+      relevance_reason
+      mitigation
+      regulatory_refs
+      wiki_refs
+
+    For fully grounded analysis from the built-in catalogue, prefer
+    `start_risk_analysis`; this tool is for directly showing completed data.
+    """
+    normalized_project = {key: str(value) for key, value in project.items()}
+    normalized_assessments: list[RiskAssessment] = []
+
+    for item in assessments:
+        normalized_assessments.append(
+            RiskAssessment(
+                risk=RiskData(
+                    id=item.risk.id,
+                    title=item.risk.title,
+                    category=item.risk.category,
+                    description=item.risk.description,
+                    severity=item.risk.severity,
+                ),
+                relevance_reason=item.relevance_reason,
+                mitigation=item.mitigation,
+                regulatory_refs=item.regulatory_refs,
+                wiki_refs=item.wiki_refs,
+            )
+        )
+
+    return Command(
+        update={
+            "project_input": normalized_project,
+            "risk_assessments": normalized_assessments,
+            "messages": [
+                ToolMessage(
+                    f"Prepared risk accordion with {len(normalized_assessments)} assessment rows.",
+                    tool_call_id=tool_call_id,
+                )
+            ],
+        },
+        goto="push_ui",
+    )
+
+
+@tool
+def search_sandbox_wiki(query: str) -> str:
+    """Search the local GovTech sandbox wiki for project, legal, and lesson context.
+
+    Use this when the user asks a knowledge question about the sandbox corpus,
+    or when you need source context before discussing risks, regulations, data
+    access, pilots, lessons learned, or Swiss public-sector AI governance.
+    """
+    hits = search_wiki_documents(query)
+    if not hits:
+        return "No matching wiki documents found."
+
+    lines: list[str] = []
+    for hit in hits:
+        lines.append(
+            f"- {hit['title']} ({hit['path']}): {hit['excerpt']}"
+        )
+    return "\n".join(lines)
+
+
+_TOOLS = [
+    update_project_field,
+    start_risk_analysis,
+    show_risk_accordion,
+    search_sandbox_wiki,
+]
 
 # ── Chat node ─────────────────────────────────────────────────────────────────
 
 _CHAT_SYSTEM = """You are a risk assessment assistant for AI projects.
 
 Your job is to build a complete project profile by asking focused questions, \
-then trigger an automated risk analysis.
+then trigger an automated risk analysis. Use both the local GovTech sandbox wiki \
+and the MIT AI Risk Repository taxonomy included in the risk catalogue.
 
 The current project state is shown at the end of this message under "COLLECTED INFO".
+
+Available tools:
+- update_project_field: store one project field.
+- start_risk_analysis: run the built-in catalogue/wiki/MIT risk analysis and render the risk accordion.
+- show_risk_accordion: render the risk accordion from already-completed assessment rows.
+- search_sandbox_wiki: search local sandbox documents.
+
+If the user asks what tools you have, list these tool names and one short description each.
 
 Process:
 1. Read COLLECTED INFO to see what is already known — never ask for something already there.
 2. Extract any new information from the user's message and save it immediately with \
    `update_project_field` (one call per field — never batch multiple fields).
-3. Ask the single most important missing question. One question per turn, no lists.
-4. Repeat until you have: name, description, sector, plus at least one of \
-   (data_types, deployment, size).
-5. Confirm with the user ("I have enough info to run the analysis — shall I proceed?") \
-   then call `start_risk_analysis`.
+   Infer obvious fields: "dental practice", "healthcare organisation", "clinic", \
+   "doctor", "patient", or "charting" imply sector="healthcare"; voice charting \
+   implies data_types="voice, health, personal"; "agent" implies description if missing.
+3. Use `search_sandbox_wiki` when the user asks about the sandbox documents, \
+   regulations, lessons, projects, or why a risk applies.
+4. If the user explicitly asks for risk assessment, risk analysis, regulation risks, \
+   compliance risks, or what risks could exist, call `start_risk_analysis` as soon as \
+   you have or can infer a description and sector. Do not ask for confirmation in that case.
+   In the same tool-call response, first call `update_project_field` for every inferred \
+   field, then call `start_risk_analysis`. Example: for "AI agent for healthcare \
+   organisations automating charting with voice", set name="Healthcare voice charting \
+   agent", description, sector="healthcare", data_types="voice, health, personal", \
+   deployment="healthcare organisation workflow", then call `start_risk_analysis`.
+5. Otherwise, ask the single most important missing question. One question per turn, no lists.
+6. For exploratory intake, repeat until you have: name, description, sector, plus at least one of \
+   (data_types, deployment, size). Then confirm before calling `start_risk_analysis`.
+7. If you already have completed risk rows from the user or a prior analysis, call \
+   `show_risk_accordion` to render them in the frontend.
 
 Required fields: name, description, sector
 Important fields: data_types, deployment, size, timeline, budget_range
@@ -148,9 +270,12 @@ def route_after_chat(state: State) -> Literal["tools", "__end__"]:
 # ── Analysis nodes ────────────────────────────────────────────────────────────
 
 
-def get_risks_node(_state: State) -> dict:
-    """Fetch the full risk catalogue from the internal database."""
-    return {"all_risks": get_all_risks()}
+def get_risks_node(state: State) -> dict:
+    """Fetch the full risk catalogue and wiki context for the project."""
+    project_input = state.get("project_input") or {}
+    query = " ".join(str(value) for value in project_input.values() if value)
+    wiki_context = search_wiki_documents(query or "AI sandbox risk assessment", limit=8)
+    return {"all_risks": get_all_risks(), "wiki_context": wiki_context}
 
 
 class _RiskSelectionItem(BaseModel):
@@ -170,8 +295,12 @@ def filter_risks_node(state: State) -> dict:
         "You are a risk analyst for AI projects.\n\n"
         f"Project profile:\n{json.dumps(state['project_input'], indent=2)}\n\n"
         "Select the 3–7 most relevant risks from the catalogue below. "
+        "The catalogue combines local Swiss public-sector risks and MIT AI Risk Repository "
+        "domain-taxonomy risks. Prefer MIT risks when their domain/subdomain is a strong match. "
         "For each, write a single sentence explaining why it applies to this specific project "
-        "(not generic boilerplate).\n\n"
+        "(not generic boilerplate). Use the sandbox wiki evidence where it helps, "
+        "but only select risks from the risk catalogue.\n\n"
+        f"Sandbox wiki evidence:\n{json.dumps(state.get('wiki_context', []), indent=2)}\n\n"
         f"Risk catalogue:\n{json.dumps(state['all_risks'], indent=2)}"
     )
 
@@ -202,6 +331,7 @@ def assess_risks_node(state: State) -> dict:
             break
 
     assessments: list[RiskAssessment] = []
+    wiki_refs = [hit["path"] for hit in state.get("wiki_context", [])[:4]]
     for risk in state["relevant_risks"]:
         mitigation_data: RiskMitigation | None = get_risk_mitigation(risk["id"])
         if mitigation_data is None:
@@ -212,6 +342,7 @@ def assess_risks_node(state: State) -> dict:
                 relevance_reason=reasons.get(risk["id"], "Relevant to this project."),
                 mitigation=mitigation_data["mitigation"],
                 regulatory_refs=mitigation_data["regulatory_refs"],
+                wiki_refs=wiki_refs,
             )
         )
 
