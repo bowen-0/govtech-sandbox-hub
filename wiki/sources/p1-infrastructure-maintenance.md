@@ -3,7 +3,7 @@ title: "Automated Infrastructure Maintenance — Drone Inspection with Computer 
 type: source
 source_type: pdf
 slug: p1-infrastructure-maintenance
-path: ../../context/reports/en/p1-infrastructure-maintenance.pdf
+path: ../pdfs/en/p1-infrastructure-maintenance.pdf
 language: en
 year: 2023
 publisher: IBM Research / Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ asymmetry: en-only
 ---
 
 # Automated Infrastructure Maintenance — Drone Inspection
+
+**Read the report:** [PDF (EN)](../pdfs/en/p1-infrastructure-maintenance.pdf)
 
 Phase I project report. Computer-vision-based drone inspection of military infrastructure, executed with IBM Research. Notable downstream legacy: produced a structured, annotated dataset for infrastructure inspection that IBM Research subsequently published on **Hugging Face** as a public benchmark — referenced explicitly in the Build & Share booklet as a model of sustainable data reuse beyond the sandbox engagement itself. Partner-access bottleneck: military base access constrained data collection.
 

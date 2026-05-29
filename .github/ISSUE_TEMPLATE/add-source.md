@@ -11,7 +11,7 @@ labels: ["source"]
 
 ## Source type
 
-- [ ] PDF (drop into `context/reports/<lang>/` if shareable)
+- [ ] PDF (drop into `wiki/pdfs/<lang>/` if shareable)
 - [ ] URL (web page, blog, policy document)
 - [ ] Academic paper
 - [ ] Video / podcast / transcript

@@ -8,8 +8,7 @@
 - [ ] New project / concept / regulation / stakeholder / lesson / synthesis page
 - [ ] Edit to an existing wiki page
 - [ ] Schema or conventions change (`wiki/CONVENTIONS.md`)
-- [ ] Context / decision doc change (`context/`)
-- [ ] Application code (post-hackathon-start)
+- [ ] Application code (`my-agent/` or `agent-chat-ui/`)
 - [ ] Other: <!-- specify -->
 
 ## Checklist

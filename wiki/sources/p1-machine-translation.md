@@ -3,8 +3,8 @@ title: "Machine Translation — Recommendations for Public Administration"
 type: source
 source_type: pdf
 slug: p1-machine-translation
-path: ../../context/reports/de/p1-machine-translation.pdf
-en_path: ../../context/reports/en/p1-machine-translation.pdf
+path: ../pdfs/de/p1-machine-translation.pdf
+en_path: ../pdfs/en/p1-machine-translation.pdf
 language: bilingual
 year: 2024
 publisher: Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # Machine Translation — Recommendations for Public Administration
+
+**Read the report:** [PDF (DE)](../pdfs/de/p1-machine-translation.pdf) · [PDF (EN)](../pdfs/en/p1-machine-translation.pdf)
 
 Phase I project report. Recommendations for public-administration adoption of MT for official documents. Examines the Swiss legal stack (cantonal IDG / federal FADP / commissioned-data-processing) when administrative text data flows through a third-party MT service. Subsequent commercial-register-extracts MT solution was successfully rolled out, including scaling with Kanton Schwyz — cited in the Build & Share booklet as a Phase I roll-out success.
 

@@ -3,8 +3,8 @@ title: "Play & Learn — How to strengthen an AI hub with a sandbox (Phase I ove
 type: source
 source_type: pdf
 slug: 00-overview-phase1-play-and-learn
-path: ../../context/reports/de/00-overview-phase1-play-and-learn.pdf
-en_path: ../../context/reports/en/00-overview-phase1-play-and-learn.pdf
+path: ../pdfs/de/00-overview-phase1-play-and-learn.pdf
+en_path: ../pdfs/en/00-overview-phase1-play-and-learn.pdf
 language: bilingual
 year: 2024
 publisher: Standortförderung Kanton Zürich, Verein Metropolitanraum Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # Play & Learn — Phase I overview
+
+**Read the report:** [PDF (DE)](../pdfs/de/00-overview-phase1-play-and-learn.pdf) · [PDF (EN)](../pdfs/en/00-overview-phase1-play-and-learn.pdf)
 
 The Phase I final report of the AI Innovation Sandbox (2022–2024). Explains *why* the sandbox exists, the four organisational goals (regulatory learning, innovation, knowledge transfer, regulatory input), the **2-axis sandbox typology** (regulatory advice × data provision), the application/selection process, and the governance model. The single best entry point into the corpus — read this before any individual project report.
 

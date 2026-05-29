@@ -14,10 +14,11 @@ wiki/
 ├── stakeholders/       type: stakeholder
 ├── lessons/            type: lesson
 ├── sources/            type: source
-└── synthesis/          type: synthesis
+├── synthesis/          type: synthesis
+└── pdfs/               binary assets — not pages. PDFs sit under pdfs/de/, pdfs/en/, etc. and are linked from sources/<slug>.md.
 ```
 
-One file = one entity. Folder determines type. Frontmatter `type:` must match the folder (this is the one hard invariant; the lint pass enforces it).
+One file = one entity. Folder determines type. Frontmatter `type:` must match the folder (this is the one hard invariant; the lint pass enforces it). `pdfs/` is the only folder without page-type semantics — it is the static-asset companion to `sources/`.
 
 ---
 
@@ -113,7 +114,8 @@ cross_cutting: true | false                                           # optional
 ```yaml
 type: source
 source_type: pdf | url | paper | video | transcript | note | dataset
-path: ../context/reports/en/p2-building-permits.pdf                   # for files
+path: ../pdfs/de/p2-building-permits.pdf                              # for files (lives under wiki/pdfs/<lang>/)
+en_path: ../pdfs/en/p2-building-permits.pdf                           # optional sibling for bilingual sources
 url: https://...                                                       # for web sources (mutually exclusive with path)
 language: en | de | bilingual                                          # source-content language
 year: 2026
@@ -228,7 +230,7 @@ The schema is **soft by design**. The five rules:
 2. **Frontmatter fields are open.** A page can introduce a new field at any time. If the field appears on 3+ pages, **codify** it: add a row to the relevant §2 schema, set a default, decide if it's required.
 3. **Taxonomies are open.** The soft enums in §4 are starting sets. Pages can introduce new values; values that recur 3+ times should be codified.
 4. **Removal is harder than addition.** Deprecating a field or value requires touching every page that uses it. Prefer adding a new field and migrating gradually.
-5. **Conventions live here; rationale lives in `../context/`.** When a convention is updated, the *what* changes in this file. The *why* is recorded in the relevant decision doc under `../context/` (often as a decision-log row). Don't bury reasoning in convention files.
+5. **Rationale lives next to the rule.** When a convention is updated, record the *why* in the change log at the bottom of this file — not in a separate decision doc.
 
 ---
 
@@ -252,5 +254,6 @@ Until the lint pass exists, these are conventions, not enforcement. Reviewers sh
 
 | Date | Change |
 |---|---|
-| 2026-05-28 | Initial conventions file. Soft schema based on the wiki vs KG decision in [`../context/architecture-route.md`](../context/architecture-route.md) and the data substrate sketch in [`../context/data-architecture-walkthrough.md`](../context/data-architecture-walkthrough.md). Sector taxonomy (§4) and partner-role taxonomy (§4) seeded from the Build & Share booklet (figure 1 p.6, role diagram p.8). |
+| 2026-05-28 | Initial conventions file. Soft schema chosen over a triple-store knowledge graph for editability and substrate-portability. Sector taxonomy (§4) and partner-role taxonomy (§4) seeded from the Build & Share booklet (figure 1 p.6, role diagram p.8). |
 | 2026-05-28 | Added `cross_cutting: true \| false` to the lesson schema. Used on lessons that are *general principles* drawn from [[00-overview-phase2-build-and-share]] §04 — these should retrieve before case-study-specific lessons for general queries. Codified after applying to 14 lessons in the same commit (well past the 3+ rule). Source: cross-cutting principles synthesis page `wiki/synthesis/phase-2-cross-cutting-principles.md`. |
+| 2026-05-29 | Added `pdfs/` folder as a static-asset companion to `sources/`. All 23 source PDFs (DE + EN) live under `wiki/pdfs/{de,en}/`, and `sources/*.md` frontmatter `path:` / `en_path:` references them via `../pdfs/...`. Each `sources/<slug>.md` also carries a **Read the report** link under its H1. Rationale: the wiki is meant to be substrate-portable (per `README.md`) and hostable as static HTML — PDFs must live inside the deployable tree. |

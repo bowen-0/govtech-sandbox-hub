@@ -3,8 +3,8 @@ title: "Smart Parking — Best Practices for Image Recognition"
 type: source
 source_type: pdf
 slug: p1-smart-parking
-path: ../../context/reports/de/p1-smart-parking.pdf
-en_path: ../../context/reports/en/p1-smart-parking.pdf
+path: ../pdfs/de/p1-smart-parking.pdf
+en_path: ../pdfs/en/p1-smart-parking.pdf
 language: bilingual
 year: 2024
 publisher: Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # Smart Parking — Best Practices for Image Recognition
+
+**Read the report:** [PDF (DE)](../pdfs/de/p1-smart-parking.pdf) · [PDF (EN)](../pdfs/en/p1-smart-parking.pdf)
 
 Phase I project report. Operational + technical playbook for camera-based free-parking-space detection. Covers data handling under cantonal IDG / federal FADP, the privacy-by-design vocabulary (low resolution, masking, edge computing, instant deletion) that recurs across the Phase I corpus, and the partner-bottleneck pattern (property owners gate-keeping camera placement). Pilot site: Frauenfeld — now in productive use and rolled out to additional cantons.
 

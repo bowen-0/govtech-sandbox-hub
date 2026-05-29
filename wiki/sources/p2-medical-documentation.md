@@ -3,8 +3,8 @@ title: "AI in Medical Documentation — Legal Frameworks and Recommendations"
 type: source
 source_type: pdf
 slug: p2-medical-documentation
-path: ../../context/reports/de/p2-medical-documentation.pdf
-en_path: ../../context/reports/en/p2-medical-documentation.pdf
+path: ../pdfs/de/p2-medical-documentation.pdf
+en_path: ../pdfs/en/p2-medical-documentation.pdf
 language: bilingual
 year: 2025
 publisher: Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # AI in Medical Documentation
+
+**Read the report:** [PDF (DE)](../pdfs/de/p2-medical-documentation.pdf) · [PDF (EN)](../pdfs/en/p2-medical-documentation.pdf)
 
 Phase II `analysis-only` project report. Legal foundations + practice-oriented guideline for AI-supported transcription, structuring, and improvement of medical documentation, anchored on the [[mpassist]] use case. Stringent data-protection requirements blocked operational deployment in a public hospital, so the project focused on the systematic clarification of regulatory issues. To scale results, the project organised a **regulatory roundtable** with 10+ start-ups and the competent data-protection supervisory authority — an effective format because AI providers rarely have direct access to supervisory authorities. Active regulatory work with Swissmedic, Department of Health Canton ZH, and the eHealth working group of swissICT.
 

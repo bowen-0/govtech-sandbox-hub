@@ -3,8 +3,8 @@ title: "Autonomous Inspection Robots — Approaches to the AI Act and EU Machine
 type: source
 source_type: pdf
 slug: p2-inspection-robots
-path: ../../context/reports/de/p2-inspection-robots.pdf
-en_path: ../../context/reports/en/p2-inspection-robots.pdf
+path: ../pdfs/de/p2-inspection-robots.pdf
+en_path: ../pdfs/en/p2-inspection-robots.pdf
 language: bilingual
 year: 2025
 publisher: Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # Autonomous Inspection Robots
+
+**Read the report:** [PDF (DE)](../pdfs/de/p2-inspection-robots.pdf) · [PDF (EN)](../pdfs/en/p2-inspection-robots.pdf)
 
 Phase II `analysis-only` project report — a legal manual disguised as a project report. Examines how autonomous inspection robots ([[anybotics]] use case) can be classified in compliance with the **EU AI Act** and the **EU Machinery Regulation 2023/1230**. Project also tested an AI governance platform from [[modulos]] against the **ISO/IEC 42001** standard. No suitable test partner was available for real-world deployment, so the sandbox treated rigorous regulatory analysis as the successful output — including first-time cross-border collaboration with Germany's Bundesnetzagentur and Liechtenstein's Office for Digital Innovation.
 

@@ -24,7 +24,7 @@ If you're unsure where a page should live, **open an issue** with the "Propose a
 A new source can be a PDF, a URL, a paper, a video, a transcript, a podcast, or just a personal note. They're all first-class.
 
 **For a file** (PDF, paper, transcript):
-- Drop the file into `context/reports/<lang>/` (or another sensible folder).
+- Drop the file into `wiki/pdfs/<lang>/` (or another sensible folder).
 - Create `wiki/sources/<slug>.md` matching the [source schema](wiki/CONVENTIONS.md#sources--citation-backbone). Required: `type: source`, `source_type:`, `path:`, `language:`, `year:`.
 - For PDFs that the team wants to cite paragraph-level, leave `paragraphs: []` — the future ingest pipeline will populate it.
 

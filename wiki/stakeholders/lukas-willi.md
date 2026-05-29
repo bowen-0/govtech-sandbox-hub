@@ -22,10 +22,6 @@ Project Lead AI (*Projektleiter KI*) at the Canton of Zurich, *Amt für Wirtscha
 - Day-to-day project lead on Phase II sandbox engagements.
 - Operational counterpart to [[raphael-von-thiessen]] for individual project execution.
 
-## For the hackathon
-
-The Q-list pre-built in [`../../context/README.md`](../../context/README.md) §8 captures the most load-bearing open questions for Lukas: embeddability requirements on zh.ch, refresh cadence + post-hackathon maintainer, sandbox-data-availability matrix, persona lifecycle stage, short videos availability + licensing, LINDAS expectations, design-language constraints.
-
 ## See also
 
 - [[raphael-von-thiessen]] — programme-level counterpart.

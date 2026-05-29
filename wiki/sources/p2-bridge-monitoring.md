@@ -3,8 +3,8 @@ title: "Sensor-based Bridge Monitoring — Data Collection and Forecasting for I
 type: source
 source_type: pdf
 slug: p2-bridge-monitoring
-path: ../../context/reports/de/p2-bridge-monitoring.pdf
-en_path: ../../context/reports/en/p2-bridge-monitoring.pdf
+path: ../pdfs/de/p2-bridge-monitoring.pdf
+en_path: ../pdfs/en/p2-bridge-monitoring.pdf
 language: bilingual
 year: 2026
 publisher: Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # Sensor-based Bridge Monitoring
+
+**Read the report:** [PDF (DE)](../pdfs/de/p2-bridge-monitoring.pdf) · [PDF (EN)](../pdfs/en/p2-bridge-monitoring.pdf)
 
 Phase II project report. Sensor-based monitoring + AI predictions for ageing infrastructure. After the original municipal-footbridge implementation partner withdrew, the project pivoted to the **Reidholz railway bridge in Wädenswil** in partnership with *Schweizerische Südostbahn (SOB)*, capturing real loads from train traffic for the first time and developing service-life forecasting models. Demonstrates the "data-driven complements standards-based" pattern in safety-critical infrastructure.
 

@@ -3,8 +3,8 @@ title: "Artificial Intelligence in Education — Legal Best Practices"
 type: source
 source_type: pdf
 slug: p1-ai-in-education
-path: ../../context/reports/de/p1-ai-in-education.pdf
-en_path: ../../context/reports/en/p1-ai-in-education.pdf
+path: ../pdfs/de/p1-ai-in-education.pdf
+en_path: ../pdfs/en/p1-ai-in-education.pdf
 language: bilingual
 year: 2023
 publisher: Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # Artificial Intelligence in Education — Legal Best Practices
+
+**Read the report:** [PDF (DE)](../pdfs/de/p1-ai-in-education.pdf) · [PDF (EN)](../pdfs/en/p1-ai-in-education.pdf)
 
 Phase I project report. Legal best-practices framework for AI use in classroom / educational settings. Covers data-protection of minors, school-IT access (the operational bottleneck), and an early articulation of the privacy-by-design vocabulary (low resolution, masking, edge computing, instant deletion, data minimisation) that the Phase I corpus subsequently reuses as canonical.
 

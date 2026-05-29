@@ -3,8 +3,8 @@ title: "Autonomous Systems — Guidelines for Regulatory Questions"
 type: source
 source_type: pdf
 slug: p1-autonomous-systems
-path: ../../context/reports/de/p1-autonomous-systems.pdf
-en_path: ../../context/reports/en/p1-autonomous-systems.pdf
+path: ../pdfs/de/p1-autonomous-systems.pdf
+en_path: ../pdfs/en/p1-autonomous-systems.pdf
 language: bilingual
 year: 2023
 publisher: Standortförderung Kanton Zürich
@@ -15,6 +15,8 @@ paragraphs: []
 ---
 
 # Autonomous Systems — Regulatory Guidelines
+
+**Read the report:** [PDF (DE)](../pdfs/de/p1-autonomous-systems.pdf) · [PDF (EN)](../pdfs/en/p1-autonomous-systems.pdf)
 
 Phase I regulatory guide for autonomous machinery (drones, agricultural systems). The canonical Phase I example of why AI providers should integrate regulation early into product development: retrofitting agricultural vehicles for automation required full re-certification, demonstrating that late-stage regulatory fixes drive flawed business models. Cited frequently in the Build & Share booklet as the foundational "integrate regulation early" lesson.
 

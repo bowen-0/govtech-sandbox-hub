@@ -75,17 +75,9 @@ If you're unsure which type a page should be, **open an issue** using the "Propo
 ## What this is *not*
 
 - **Not a chat interface.** That's a later layer. The wiki is the substrate; UIs sit on top.
-- **Not a knowledge graph in a triple store.** The graph lives in YAML frontmatter and is *exportable* to JSON-LD / DuckDB / Neo4j on demand. See [`../context/architecture-route.md`](../context/architecture-route.md) for the rationale.
+- **Not a knowledge graph in a triple store.** The graph lives in YAML frontmatter and is *exportable* to JSON-LD / DuckDB / Neo4j on demand.
 - **Not a database with enforced schema.** Frontmatter conventions are linted, not validated. Easier evolution > stricter typing during the formative phase.
-- **Not the only place truth lives.** The German PDFs in `../context/reports/de/` are the citation-authoritative ground truth. The wiki structures them; it does not replace them.
-
----
-
-## Relationship to `../context/`
-
-`../context/` holds the **prep material** for the hackathon — the challenge brief, the source PDFs, English digests of each report, and the pre-event decision docs (`architecture-route.md`, `frontend-route.md`, `data-architecture-walkthrough.md`, etc.). Those docs are the *why* behind the wiki's design. This folder is the *what* — the knowledge itself in the chosen substrate.
-
-When the application repo is bootstrapped during the hackathon, it will live in a sibling folder (or take over the root) and **consume** `wiki/` as static input. The wiki is decoupled from the app on purpose.
+- **Not the only place truth lives.** The German PDFs in [`pdfs/de/`](pdfs/de/) are the citation-authoritative ground truth. The wiki structures them; it does not replace them.
 
 ---
 
@@ -93,6 +85,6 @@ When the application repo is bootstrapped during the hackathon, it will live in 
 
 - `kebab-case-slugs.md`, ASCII only, no spaces.
 - For PDFs that have both DE and EN versions, the wiki uses the language-neutral slug (e.g. `building-permits.md`, not `building-permits-en.md`).
-- Sources use the same slug as their underlying file: `sources/p2-building-permits.md` ↔ `context/reports/{de,en}/p2-building-permits.pdf`.
+- Sources use the same slug as their underlying file: `sources/p2-building-permits.md` ↔ `pdfs/{de,en}/p2-building-permits.pdf`.
 
 Full naming + frontmatter rules in [`CONVENTIONS.md`](CONVENTIONS.md).
