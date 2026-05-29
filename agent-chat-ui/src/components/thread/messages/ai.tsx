@@ -11,11 +11,17 @@ import { cn } from "@/lib/utils";
 import { ToolCalls, ToolResult } from "./tool-calls";
 import { MessageContentComplex } from "@langchain/core/messages";
 import { Fragment } from "react/jsx-runtime";
+import type { FunctionComponent } from "react";
 import { isAgentInboxInterruptSchema } from "@/lib/agent-inbox-interrupt";
 import { ThreadView } from "../agent-inbox";
 import { useQueryState, parseAsBoolean } from "nuqs";
 import { GenericInterruptView } from "./generic-interrupt";
 import { useArtifact } from "../artifact";
+
+const customComponentRegistry = {
+  risk_accordion: RiskAccordion as unknown as FunctionComponent,
+  sample_ui: () => <div>Sample UI Component</div>,
+};
 
 function CustomComponent({
   message,
@@ -39,7 +45,7 @@ function CustomComponent({
           stream={thread as unknown as ReturnType<typeof useStream>}
           message={customComponent}
           meta={{ ui: customComponent, artifact }}
-          components={{ risk_accordion: RiskAccordion }}
+          components={customComponentRegistry}
         />
       ))}
     </Fragment>

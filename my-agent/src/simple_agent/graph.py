@@ -145,8 +145,10 @@ def start_risk_analysis(
 ) -> Command:
     """Trigger the automated risk analysis pipeline.
 
-    Only call after confirming with the user. Requires at minimum:
-    name, description, sector, and at least one of (data_types, deployment, size).
+    Call when the user explicitly asks for a risk assessment, risk analysis,
+    regulatory risk list, or "what risks could exist". You may infer obvious
+    fields from the conversation, such as healthcare sector from "healthcare",
+    "dental", "doctor", "clinic", or "patient".
     """
     return Command(
         update={
@@ -288,15 +290,26 @@ references, not a synthesis essay.
 
 The current project state is shown at the end of this message under "COLLECTED INFO".
 
+The risk catalogue combines local Swiss public-sector risks with the MIT AI Risk \
+Repository taxonomy, so risks come back tagged as either domain-specific or MIT-domain.
+
 Profile-gathering process:
 1. Read COLLECTED INFO to see what is already known — never ask for something already there.
 2. Extract any new information from the user's message and save it immediately with \
-   `update_project_field` (one call per field — never batch multiple fields).
-3. Ask the single most important missing question. One question per turn, no lists.
-4. Repeat until you have: name, description, sector, plus at least one of \
-   (data_types, deployment, size).
-5. Confirm with the user ("I have enough info to run the analysis — shall I proceed?") \
+   `update_project_field` (one call per field — never batch multiple fields). \
+   Infer obvious fields: "dental practice", "healthcare organisation", "clinic", \
+   "doctor", "patient", or "charting" imply sector="healthcare"; voice charting \
+   implies data_types="voice, health, personal".
+3. If the user explicitly asks for a risk assessment, risk analysis, regulatory risk \
+   list, or "what risks could exist", call `start_risk_analysis` as soon as you have \
+   or can infer a description and sector. Do not ask for confirmation in that case. \
+   In the same response, first call `update_project_field` for each inferred field, \
    then call `start_risk_analysis`.
+4. Otherwise, ask the single most important missing question. One question per turn, no lists.
+5. For exploratory intake, repeat until you have: name, description, sector, plus at \
+   least one of (data_types, deployment, size). Then confirm with the user \
+   ("I have enough info to run the analysis — shall I proceed?") and call \
+   `start_risk_analysis`.
 
 Required fields: name, description, sector
 Important fields: data_types, deployment, size, timeline, budget_range
