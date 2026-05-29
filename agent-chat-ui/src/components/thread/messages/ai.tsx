@@ -6,6 +6,7 @@ import { getContentString } from "../utils";
 import { BranchSwitcher, CommandBar } from "./shared";
 import { MarkdownText } from "../markdown-text";
 import { LoadExternalComponent } from "@langchain/langgraph-sdk/react-ui";
+import { RiskAccordion } from "../risk-accordion";
 import { cn } from "@/lib/utils";
 import { ToolCalls, ToolResult } from "./tool-calls";
 import { MessageContentComplex } from "@langchain/core/messages";
@@ -38,6 +39,7 @@ function CustomComponent({
           stream={thread as unknown as ReturnType<typeof useStream>}
           message={customComponent}
           meta={{ ui: customComponent, artifact }}
+          components={{ risk_accordion: RiskAccordion }}
         />
       ))}
     </Fragment>
