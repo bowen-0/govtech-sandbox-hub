@@ -1,10 +1,11 @@
-"""Risk assessment agent for AI sandbox projects (Swiss public sector)."""
+"""Risk assessment + wiki-grounded agent for AI sandbox projects (Swiss public sector)."""
 
 from __future__ import annotations
 
 import json
 import os
 import uuid
+from pathlib import Path
 from typing import Annotated, Literal
 
 from langchain.chat_models import init_chat_model
@@ -27,6 +28,63 @@ from .risks_db import Risk as RiskData
 
 CHAT_MODEL = os.getenv("CHAT_MODEL", "openai:gpt-4o-mini")
 ANALYSIS_MODEL = os.getenv("ANALYSIS_MODEL", "openai:gpt-4o")
+
+# ── Wiki ──────────────────────────────────────────────────────────────────────
+
+# Wiki root resolves to ../wiki relative to this file by default; override via env.
+_DEFAULT_WIKI_ROOT = (Path(__file__).resolve().parents[3] / "wiki").resolve()
+WIKI_ROOT = Path(os.getenv("WIKI_ROOT", str(_DEFAULT_WIKI_ROOT))).resolve()
+
+# Page-type folders the wiki organises content into.
+_WIKI_FOLDERS = (
+    "projects",
+    "concepts",
+    "regulations",
+    "stakeholders",
+    "lessons",
+    "sources",
+    "synthesis",
+)
+
+# Root-level pages addressable by bare slug (no folder).
+_ROOT_PAGES = ("index", "README", "QUERY", "CONVENTIONS", "INGEST")
+
+# Cap response sizes so a single wiki call can't blow context on a small chat model.
+_MAX_READ_BYTES = 60_000
+_MAX_SEARCH_HITS = 25
+_SEARCH_SNIPPET_CHARS = 160
+
+
+def _safe_path(candidate: Path) -> Path:
+    """Resolve `candidate` and ensure it stays inside WIKI_ROOT."""
+    resolved = candidate.resolve()
+    if WIKI_ROOT not in resolved.parents and resolved != WIKI_ROOT:
+        raise ValueError(f"Path escapes wiki root: {candidate}")
+    return resolved
+
+
+def _try_safe(candidate: Path) -> Path | None:
+    try:
+        return _safe_path(candidate)
+    except ValueError:
+        return None
+
+
+def _find_page(slug: str) -> Path | None:
+    """Resolve a slug to a markdown file. Accepts bare slugs and folder/slug paths."""
+    slug = slug.strip().removesuffix(".md")
+    if "/" in slug:
+        candidate = _try_safe(WIKI_ROOT / f"{slug}.md")
+        return candidate if candidate and candidate.is_file() else None
+    if slug in _ROOT_PAGES:
+        candidate = _try_safe(WIKI_ROOT / f"{slug}.md")
+        if candidate and candidate.is_file():
+            return candidate
+    for folder in _WIKI_FOLDERS:
+        candidate = _try_safe(WIKI_ROOT / folder / f"{slug}.md")
+        if candidate and candidate.is_file():
+            return candidate
+    return None
 
 # ── State ─────────────────────────────────────────────────────────────────────
 
@@ -98,18 +156,139 @@ def start_risk_analysis(
     )
 
 
-_TOOLS = [update_project_field, start_risk_analysis]
+@tool
+def list_wiki_pages(folder: str | None = None) -> str:
+    """List wiki pages from the Sandbox Knowledge Hub, optionally filtered to one folder.
+
+    Use to enumerate every entry of one type (every project, every lesson). For broad
+    queries, prefer reading 'index' first via read_wiki_page.
+
+    Args:
+        folder: One of projects, concepts, regulations, stakeholders, lessons,
+            sources, synthesis. If omitted, lists pages in every folder.
+    """
+    folders = (folder,) if folder else _WIKI_FOLDERS
+    lines: list[str] = []
+    for f in folders:
+        if f not in _WIKI_FOLDERS:
+            return f"Unknown folder: {f}. Valid folders: {', '.join(_WIKI_FOLDERS)}."
+        folder_path = _try_safe(WIKI_ROOT / f)
+        if not folder_path or not folder_path.is_dir():
+            continue
+        slugs = sorted(p.stem for p in folder_path.glob("*.md"))
+        if not slugs:
+            continue
+        lines.append(f"## {f}/")
+        lines.extend(f"- {slug}" for slug in slugs)
+        lines.append("")
+    return "\n".join(lines).rstrip() or "No pages found."
+
+
+@tool
+def read_wiki_page(slug: str) -> str:
+    """Read a wiki page from the Sandbox Knowledge Hub and return its full markdown.
+
+    The wiki is the source of truth for questions about the Canton of Zürich's
+    AI Innovation Sandbox. Slugs are kebab-case. Examples:
+    - 'index'              — the navigable inventory; read this FIRST for any wiki query.
+    - 'QUERY'              — the answering procedure (citation rules, voice).
+    - 'digital-eye-clinic' — a project page.
+    - 'data-access'        — a concept page.
+    - 'eu-ai-act'          — a regulation page.
+
+    A folder-qualified path like 'projects/digital-eye-clinic' also works.
+
+    Args:
+        slug: The page slug or folder/slug path. Omit the .md extension.
+    """
+    page = _find_page(slug)
+    if page is None:
+        return (
+            f"No page found for slug '{slug}'. Try list_wiki_pages() to see what "
+            f"exists, or search_wiki('{slug}') for keyword matches."
+        )
+    text = page.read_text(encoding="utf-8")
+    rel = page.relative_to(WIKI_ROOT)
+    header = f"# wiki/{rel}\n\n"
+    if len(text) > _MAX_READ_BYTES:
+        text = text[:_MAX_READ_BYTES] + f"\n\n[... truncated at {_MAX_READ_BYTES} bytes]"
+    return header + text
+
+
+@tool
+def search_wiki(query: str) -> str:
+    """Full-text search across every wiki page for a substring (case-insensitive).
+
+    Use when you don't know the slug but have a keyword (a name, a regulation
+    acronym, a German term). For broad conceptual queries prefer reading 'index'
+    and following links.
+
+    Args:
+        query: Substring to match. Short, distinctive terms work best.
+    """
+    needle = query.strip().lower()
+    if len(needle) < 2:
+        return "Query too short — use at least 2 characters."
+    hits: list[str] = []
+    for md_path in sorted(WIKI_ROOT.rglob("*.md")):
+        if not _try_safe(md_path):
+            continue
+        try:
+            text = md_path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        idx = text.lower().find(needle)
+        if idx == -1:
+            continue
+        start = max(0, idx - _SEARCH_SNIPPET_CHARS // 2)
+        end = min(len(text), idx + len(needle) + _SEARCH_SNIPPET_CHARS // 2)
+        snippet = text[start:end].replace("\n", " ").strip()
+        rel = md_path.relative_to(WIKI_ROOT)
+        hits.append(f"- `wiki/{rel}` … {snippet} …")
+        if len(hits) >= _MAX_SEARCH_HITS:
+            hits.append(f"\n[truncated at {_MAX_SEARCH_HITS} hits — narrow the query]")
+            break
+    if not hits:
+        return f"No matches for '{query}'."
+    return "\n".join(hits)
+
+
+_TOOLS = [
+    update_project_field,
+    start_risk_analysis,
+    list_wiki_pages,
+    read_wiki_page,
+    search_wiki,
+]
 
 # ── Chat node ─────────────────────────────────────────────────────────────────
 
-_CHAT_SYSTEM = """You are a risk assessment assistant for AI projects.
+_CHAT_SYSTEM = """You are a risk assessment assistant for AI projects in the \
+Canton of Zürich AI Innovation Sandbox.
 
-Your job is to build a complete project profile by asking focused questions, \
-then trigger an automated risk analysis.
+Your primary job is to build a complete project profile by asking focused \
+questions, then trigger an automated risk analysis.
+
+You also have access to the Sandbox Knowledge Hub wiki — the structured \
+corpus of prior sandbox projects, concepts, regulations, and lessons. Use it \
+in two situations:
+
+A. **The user asks a question about the corpus** (e.g. "what does the wiki say \
+about data access?", "what projects ran in healthcare?", "explain the EU AI \
+Act"). Answer it from the wiki — do not gather a project profile in this case. \
+Start with `read_wiki_page('index')` to find the right entry pages, then read \
+3-5 relevant pages, then synthesise. Cite paragraph anchors as \
+`[(source-slug#para-N)](sources/source-slug.md#para-N)` when available; never \
+invent anchors. The full procedure lives at `read_wiki_page('QUERY')`.
+
+B. **Grounding a profile question or risk discussion** in prior projects \
+(e.g. when the user mentions a sector, briefly note a comparable wiki project \
+to make the next question more concrete). Keep this lightweight — one or two \
+references, not a synthesis essay.
 
 The current project state is shown at the end of this message under "COLLECTED INFO".
 
-Process:
+Profile-gathering process:
 1. Read COLLECTED INFO to see what is already known — never ask for something already there.
 2. Extract any new information from the user's message and save it immediately with \
    `update_project_field` (one call per field — never batch multiple fields).
