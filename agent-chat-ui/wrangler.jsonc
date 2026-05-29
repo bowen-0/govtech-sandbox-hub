@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "sandbox-hub-ui",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-05-29",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    "NEXT_PUBLIC_ASSISTANT_ID": "agent"
+  }
+  // Set after backend container is deployed:
+  //   wrangler secret put LANGGRAPH_API_URL    (e.g. https://sandbox-hub-agent.<subdomain>.workers.dev)
+  //   wrangler secret put LANGSMITH_API_KEY    (optional; only if using LangSmith Cloud)
+  //
+  // For local preview against local backend, set in .dev.vars:
+  //   LANGGRAPH_API_URL=http://host.docker.internal:2024
+}

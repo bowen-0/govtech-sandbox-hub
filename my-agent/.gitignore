@@ -10,3 +10,8 @@ build/
 dist/
 .DS_Store
 .langgraph_api/
+
+# Worker / wrangler
+node_modules/
+.wrangler/
+worker/env.d.ts
